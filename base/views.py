@@ -1,7 +1,10 @@
 from operator import truediv
 from tkinter import TRUE
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from base.models import PatientData
+
 
 def home(request):
     return render(request, 'home.html', {"patients" : patients})
@@ -22,6 +25,51 @@ patients = [{'Id' : 1, 'FirstName' : "Ran", 'LastName' : 'Levi',
 
 def registerPatient(request):
         if request.method == 'POST':
-            return HttpResponse(request.POST)
+            checkRequestFields(request)
 
-    #return render(request, 'index.html')
+        return HttpResponse("with get")
+
+def checkRequestFields(request):
+
+        if "FirstName" in request.POST:
+            firstName = request.POST["FirstName"]
+
+        if "LastName" in request.POST:
+            lastName = request.POST["LastName"]
+
+        if "BirthDay" in request.POST:
+            birthDay = request.POST["BirthDay"]
+ 
+        if "Address" in request.POST:
+            address = request.POST["Address"]
+
+        if "City" in request.POST:
+            city = request.POST["City"]
+
+        if "ZipCode" in request.POST:  
+            zipCode = request.POST["ZipCode"]
+
+        if "LandLine" in request.POST:
+            landLine = request.POST["LandLine"]
+
+        if "Phone" in request.POST:  
+            phone = request.POST["Phone"]
+
+        if "ifInfected" in request.POST:
+            ifInfected = True
+        else:
+            ifInfected = False
+ 
+        PatientData(
+            FirstName = firstName,
+            LastName=lastName,
+            BirthDay=birthDay,
+            Address=address,
+            City=city,
+            ZipCode=zipCode,
+            LandLine=landLine,
+            Phone=phone,
+            ifInfected = ifInfected,
+            ).save()
+
+        return redirect('/Summary')
