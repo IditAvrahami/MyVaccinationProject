@@ -1,120 +1,152 @@
-import {Link} from "react-router-dom";
 import Menu from "./Menu";
+import axios from 'axios';
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+
+
+
 
 export default function Register() {
-    return (
+    const [FirstName, FirstNameHandler] = useState('');
+    const [LastName, LastNameHandler] = useState('');
+    const [BirthDay, BirthDayHandler] = useState('');
+    const [Address, AddressHandler] = useState('');
+    const [City, CityHandler ] = useState('');
+    const [ZipCode, ZipCodeHandler] = useState('');
+    const [LandLine, LandLineHandler] = useState('');
+    const [Phone, PhoneHandler] = useState('');
+    const [IfInfected, IfInfectedHandler] = useState(false);
+    const [Other, OtherHandler] = useState('');
+   /* const [otherInput, setOtherInput] = useState(false);*/
+/*    const [conditionInput, setConditionInput] = useState([]);*/
+    /*const [error, setError] = useState('');*/
+    const navigate = useNavigate();
 
-        <div className="container">
+    const submitHandler =async e =>{
+        e.preventDefault();
+        const dataForm = {
+            FirstName, LastName, BirthDay, Address, City, ZipCode,LandLine, Phone, IfInfected, Other
+        }
+
+        fetch('http://localhost:8000/register/', {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataForm),
+        })
+            .then(response => response.json())
+            .then(data => {
+                navigate('/summary');
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                alert("Problem with server, Please try again!");
+                console.error('Error:', error);
+            });
+      /*  try{
+            await axios.post('http://localhost:8000/register/', sendData);
+            navigate('/summary')
+        }catch(e){
+            alert("Problem with server, Please try again!");
+        }*/
+    }
+
+    return (
+        <form action="http://localhost:8000/register/" method="post">
             <Menu></Menu>
-            <div className="row justify-content-center">
-                <div className="col-6">
-                    <h1>Registration Page</h1><br/>
-                    <strong>Please fill in your personal details.</strong><br/><br/>
-                    <form action="http://127.0.0.1:8000/register" method="post">
-                        <div className="mb-4">
-                            <label for="FirstName" className="form-label fw-normal h5">
-                                First Name:    </label>
-                            <input
-                                type="text" className="form-control" autoComplete="off"
-                                id="FirstName" placeholder="Enter your First Name"/>
-                        </div>
-                        <div className="mb-4">
-                            <label for="LastName" className="form-label fw-normal h5">
-                                Last Name:    </label>
-                            <input
-                                type="text" className="form-control" autoComplete="off"
-                                id="LastName" placeholder="Enter your Last Name"/>
-                        </div>
-                        <div className="mb-4">
-                            <label for="date" className="form-label fw-normal h5">
-                                Date of birth:    </label>
-                            <input
-                                type="date" className="form-control"
-                                id="Date-of-birth" name="date_of_birth"/>
-                        </div>
-                        <div className="mb-4">
-                            <label for="address" className="form-label fw-normal h5">
-                                Address:    </label>
-                            <input
-                                type="text" className="form-control" autoComplete="off"
-                                placeholder="Enter your Address" id="address" />
-                        </div>
-                        <div className="mb-4">
-                            <label for="city" className="form-label fw-normal h5">
-                                City:    </label>
-                            <select className="form-select" aria-label="Default select example" name="city">
-                                <option selected>One</option>
-                                <option value="">Two</option>
-                                <option value="">Three</option>
-                            </select>
-                        </div>
-                        <div className="mb-4">
-                            <label for="zip_code" className="form-label fw-normal h5">
-                                Zip code:    </label>
-                            <input
-                                type="number" className="form-control" autoComplete="off"
-                                id="zip_code" name="zip_code" placeholder="Enter your Zip code"/>
-                        </div>
-                        <div className="mb-4">
-                            <label for="land_line" className="form-label fw-normal h5">
-                                Land line:    </label>
-                            <input
-                                type="number" className="form-control" autoComplete="off"
-                                id="land_line" name="land_line" placeholder="Enter your Land line"/>
-                        </div>
-                        <div className="mb-4">
-                            <label for="cellular_phone" className="form-label fw-normal h5">
-                                Cellular phone:    </label>
-                            <input
-                                type="number" className="form-control" autoComplete="off"
-                                id="cellular_phone" name="cellular_phone" placeholder="Enter your Cellular phone"/>
-                        </div><br/>
-                        <div className="mb-4 form-check">
-                            <input type="checkbox" className="form-check-input" id="exampleCheck1" name="been_infected" />
-                            <label className="form-check-label" for="exampleCheck1">
-                                Have been infected by COVID-19 before
-                            </label>
-                        </div><br/>
-                        <div className="mb-4">
-                            <label for="LastName" className="form-label fw-normal h5">
-                                Other conditions:
-                            </label>
-                            <div className="card">
-                                <div className="card-body border-3 border border-3 rounded-3">
-                                    <div className="mb-3 form-check">
-                                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                        <label className="form-check-label" for="exampleCheck1">
-                                            Diabetes
-                                        </label>
-                                    </div>
-                                    <div className="mb-3 form-check">
-                                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                        <label className="form-check-label" for="exampleCheck1">
-                                            Cardio-Vascular problems
-                                        </label>
-                                    </div>
-                                     <div className="mb-3 form-check">
-                                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                        <label className="form-check-label" for="exampleCheck1">
-                                            High Blood Pressure
-                                        </label>
-                                    </div>
-                                    <br/>
-                                    <label>
-                                        Other: <br/><input type="text" name="other" />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mx-auto my-4 text-center">
-                            <button type="submit" className="btn-lg btn-primary">
-                                Submit
-                            </button>
-                        </div>
-                    </form>
-                </div>
+            <h1>Registration Page</h1>
+            <strong>Please fill in your personal details.</strong><br/><br/>
+            <div className="form-group">
+                <label >First Name:</label>
+                <input type="text" id="FirstName" className="form-control" autoComplete="off"
+                       placeholder="Enter First Name" value={FirstName} onChange={(e) => FirstNameHandler(e.target.value)}/>
+             {/*   <p  className={nameIsValid ? "" : "alert alert-danger"}> {nameIsValid ? '' : `${message}`}</p>*/}
             </div>
-        </div>
+            <br/>
+            <div className="form-group">
+                <label>Last Name:</label>
+                <input type="text" id="LastName" className="form-control" autoComplete="off"
+                       placeholder="Enter Last Name" value={LastName} onChange={(e) => LastNameHandler(e.target.value)}/>
+             {/*   <p  className={latitudeIsValid ? "" : "alert alert-danger"}> {latitudeIsValid ? '' : `${latitudeMessage}`}</p>*/}
+            </div>
+            <br/>
+            <div className="mb-4">
+                <label htmlFor="Date-of-birth" className="form-label fw-normal h5">
+                    Date of birth:
+                </label>
+                <input
+                    type="date"
+                    className="form-control"
+                    id="Date-BirthDay-birth"
+                    aria-describedby="emailHelp"
+                    name="BirthDay"
+                    value={BirthDay}
+                    onChange={(ev) => {
+                        const value = ev.target.value;
+                        BirthDayHandler(value);
+                    }}
+                />
+            </div>
+            <br/>
+            <div className="form-group">
+                <label>Address:</label>
+                <input type="text" id="Address" className="form-control" autoComplete="off"
+                       placeholder="Enter Address" value={Address} onChange={(e) => AddressHandler(e.target.value)}/>
+               {/* <p  className={longitudeIsValid ? "" : "alert alert-danger"}> {longitudeIsValid ? '' : `${longitudeMessage}`}</p>*/}
+            </div>
+            <br/>
+            <div className="mb-4">
+                <label htmlFor="city" className="form-label fw-normal h5">
+                    City: </label>
+                <select className="form-select" aria-label="Default select example"
+                        name="City" value={City} onChange={(e)=>CityHandler(e.target.value)}>
+                    <option selected>Tel Aviv</option>
+                    <option value="">Jerusalem</option>
+                    <option value="">Haifa</option>
+                    <option value="">Ashdod</option>
+                </select>
+            </div>
+            <br/>
+            <div className="form-group">
+                <label>Zip Code:</label>
+                <input type="number" id="ZipCode" className="form-control" autoComplete="off"
+                       placeholder="Enter ZipCode" value={ZipCode} onChange={(e) => ZipCodeHandler(e.target.value)}/>
+                {/* <p  className={longitudeIsValid ? "" : "alert alert-danger"}> {longitudeIsValid ? '' : `${longitudeMessage}`}</p>*/}
+            </div>
+            <br/>
+            <div className="form-group">
+                <label>Land Line:</label>
+                <input type="number" id="LandLine" className="form-control" autoComplete="off"
+                       placeholder="Enter LandLine" value={LandLine} onChange={(e) => LandLineHandler(e.target.value)}/>
+                {/* <p  className={longitudeIsValid ? "" : "alert alert-danger"}> {longitudeIsValid ? '' : `${longitudeMessage}`}</p>*/}
+            </div>
+            <br/>
+            <div className="form-group">
+                <label>Phone Number:</label>
+                <input type="number" id="Phone" className="form-control" autoComplete="off"
+                       placeholder="Enter Phone" value={Phone} onChange={(e) => PhoneHandler(e.target.value)}/>
+                {/* <p  className={longitudeIsValid ? "" : "alert alert-danger"}> {longitudeIsValid ? '' : `${longitudeMessage}`}</p>*/}
+            </div>
+            <br/>
+            <div className="mb-4 form-check">
+                <input type="checkbox" className="form-check-input" id="IfInfected" autoComplete="off"
+                value={IfInfected} onChange={(e)=> IfInfectedHandler(!IfInfected)}/>
+                <label className="form-check-label" htmlFor="exampleCheck1">
+                    Have been infected by COVID-19 before?
+                </label>
+            </div>
+            <br/>
+            <div className="form-group">
+                <label>Other:</label>
+                <input type="text" id="Other" className="form-control" autoComplete="off"
+                       value={Other} onChange={(e) => OtherHandler(e.target.value)}/>
+                {/* <p  className={longitudeIsValid ? "" : "alert alert-danger"}> {longitudeIsValid ? '' : `${longitudeMessage}`}</p>*/}
+            </div>
+            <input type="submit" value="Submit"/>
+        </form>
+
+
     );
 
 }
